@@ -19,21 +19,13 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # 🛠️ 自动在双层同名目录下生成标准的编译环境
-    - name: Auto Repair Gradle Environment
-      run: |
-        cd LoraReceiver/LoraReceiver
-        gradle wrapper --gradle-version 8.0
-
-    # 🎯 准确指向第二层同名文件夹进行强行编译
-    - name: Run Autocomplete Build
+    # 🚀 直接调用官方最新编译动作，全盘自动扫描，不使用任何本地 gradlew 脚本
+    - name: Direct Build APK
       uses: gradle/actions/setup-gradle@v3
       with:
-        gradle-version: wrapper
         build-root-directory: LoraReceiver/LoraReceiver
         arguments: assembleDebug
-        
-    # 📥 准确提取打包出来的 APK 产物
+
     - name: Upload Output APK
       uses: actions/upload-artifact@v4
       with:

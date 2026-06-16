@@ -19,20 +19,20 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # 🛠️ 1. 精准进入第一层目录，生成标准编译环境
+    # 🛠️ 升级版本：将 8.0 升级为 8.7，完美兼容 AI 最新的安卓语法
     - name: Generate Gradle Wrapper
       run: |
         cd LoraReceiver
-        gradle wrapper --gradle-version 8.0
+        gradle wrapper --gradle-version 8.7
 
-    # 🚀 2. 在第一层目录下强行编译打包
+    # 🚀 在第一层目录下强行编译打包
     - name: Compile APK
       run: |
         cd LoraReceiver
         chmod +x gradlew
         ./gradlew assembleDebug
 
-    # 📥 3. 从第一层目录中精准抓取生成的 APK 产物
+    # 📥 从第一层目录中精准抓取生成的 APK 产物
     - name: Upload Output APK
       uses: actions/upload-artifact@v4
       with:

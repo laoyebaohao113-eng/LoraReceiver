@@ -19,16 +19,23 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # 🛠️ 智能修复：如果项目没有初始化，使用 gradle 官方命令直接强行编译
-    - name: Setup Gradle and Build APK
+    # 🛠️ 自动在双层同名目录下生成标准的编译环境
+    - name: Auto Repair Gradle Environment
+      run: |
+        cd LoraReceiver/LoraReceiver
+        gradle wrapper --gradle-version 8.0
+
+    # 🎯 准确指向第二层同名文件夹进行强行编译
+    - name: Run Autocomplete Build
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: wrapper
-        build-root-directory: LoraReceiver
+        build-root-directory: LoraReceiver/LoraReceiver
         arguments: assembleDebug
         
+    # 📥 准确提取打包出来的 APK 产物
     - name: Upload Output APK
       uses: actions/upload-artifact@v4
       with:
         name: LoraReceiver-App
-        path: LoraReceiver/app/build/outputs/apk/debug/app-debug.apk
+        path: LoraReceiver/LoraReceiver/app/build/outputs/apk/debug/app-debug.apk

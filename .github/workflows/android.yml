@@ -19,20 +19,13 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # 🛠️ 升级版本：将 8.0 升级为 8.7，完美兼容 AI 最新的安卓语法
-    - name: Generate Gradle Wrapper
-      run: |
-        cd LoraReceiver
-        gradle wrapper --gradle-version 8.7
+    # 🚀 使用官方最新版沙盒环境，全自动隔离并适配你项目本身的 build.gradle 版本，不再调用系统命令
+    - name: Setup Gradle and Compile
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        build-root-directory: LoraReceiver
+        arguments: assembleDebug
 
-    # 🚀 在第一层目录下强行编译打包
-    - name: Compile APK
-      run: |
-        cd LoraReceiver
-        chmod +x gradlew
-        ./gradlew assembleDebug
-
-    # 📥 从第一层目录中精准抓取生成的 APK 产物
     - name: Upload Output APK
       uses: actions/upload-artifact@v4
       with:

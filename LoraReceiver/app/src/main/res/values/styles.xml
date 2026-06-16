@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+    </style>
+
+    <style name="CardStyle">
+        <item name="android:background">@color/colorSurface</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+    </style>
+
+    <style name="LabelStyle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorTextSecondary</item>
+        <item name="android:layout_marginBottom">4dp</item>
+    </style>
+
+    <style name="InputStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/bg_input</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+</resources>

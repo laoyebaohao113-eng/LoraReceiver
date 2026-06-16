@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- CP2102 (Silicon Labs) -->
+    <usb-device vendor-id="4292" product-id="60000" />
+    <!-- CP2104 -->
+    <usb-device vendor-id="4292" product-id="60016" />
+    <!-- CH340 -->
+    <usb-device vendor-id="6790" product-id="29987" />
+    <!-- CH341 -->
+    <usb-device vendor-id="6790" product-id="21795" />
+    <!-- FTDI FT232R -->
+    <usb-device vendor-id="1027" product-id="24577" />
+    <!-- FTDI FT231X -->
+    <usb-device vendor-id="1027" product-id="24596" />
+    <!-- PL2303 -->
+    <usb-device vendor-id="1659" product-id="8963" />
+</resources>

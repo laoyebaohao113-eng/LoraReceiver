@@ -1,37 +1,9 @@
-name: Android CI Build
-
-on:
-  push:
-    branches: [ "main", "master" ]
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    # 🛠️ 1. 初始化最新的 v4 缓存和环境（不带任何已被废弃的旧参数）
-    - name: Setup Gradle Environment
+- name: Setup Gradle Environment
       uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: '8.7'
 
-    # 🚀 2. 绕过插件限制，直接使用原生 Linux 命令进入子目录强行一键打包
     - name: Compile APK via Daemon
       run: |
         cd LoraReceiver
         gradle assembleDebug --no-daemon
-
-    # 📥 3. 精准抓取生成的 APK 产物
-    - name: Upload Output APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: LoraReceiver-App
-        path: LoraReceiver/app/build/outputs/apk/debug/app-debug.apk

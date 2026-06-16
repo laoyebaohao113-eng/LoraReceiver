@@ -19,13 +19,20 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # 🚀 直接调用官方最新编译动作，全盘自动扫描，不使用任何本地 gradlew 脚本
-    - name: Direct Build APK
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        build-root-directory: LoraReceiver/LoraReceiver
-        arguments: assembleDebug
+    # 🛠️ 1. 强行精准进入两层目录，下载官方标准编译脚手架
+    - name: Force Generate Gradle Wrapper
+      run: |
+        cd LoraReceiver/LoraReceiver
+        gradle wrapper --gradle-version 8.0
 
+    # 🚀 2. 强行执行原生打包命令，不再依赖任何第三方插件路径判断
+    - name: Force Compile APK
+      run: |
+        cd LoraReceiver/LoraReceiver
+        chmod +x gradlew
+        ./gradlew assembleDebug
+
+    # 📥 3. 精准抓取生成的 APK 产物
     - name: Upload Output APK
       uses: actions/upload-artifact@v4
       with:

@@ -1,0 +1,9 @@
+{
+  "appId": "com.pid.client",
+  "appName": "派点客户端",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true
+  }
+}

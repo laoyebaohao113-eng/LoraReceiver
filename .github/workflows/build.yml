@@ -1,6 +1,5 @@
 name: Build APK
 
-# 触发:推代码到任意分支、或在 Actions 页手动点 Run
 on:
   push:
   pull_request:
@@ -31,13 +30,32 @@ jobs:
         with:
           gradle-version: '8.7'
 
+      - name: 自动定位 DeviceProbe 工程目录
+        run: |
+          echo "===== 仓库根 ls ====="; ls -la
+          M=$(find . -path '*com/rescue/deviceprobe/MainActivity.java' -not -path '*/.git/*' | head -1)
+          if [ -n "$M" ]; then
+            DIR=$(echo "$M" | sed 's#/app/src/main/java/com/rescue/deviceprobe/MainActivity.java##')
+          else
+            F=$(find . -name 'settings.gradle' -not -path '*/.git/*' | head -1)
+            DIR=$(dirname "$F")
+          fi
+          if [ -z "$DIR" ] || [ ! -f "$DIR/settings.gradle" ]; then
+            echo "::error::没找到 DeviceProbe 工程,文件没传上来或传错了"
+            find . -maxdepth 4 -not -path './.git/*' | sort
+            exit 1
+          fi
+          echo "找到工程目录: $DIR"
+          echo "PROJECT_DIR=$DIR" >> "$GITHUB_ENV"
+          ls -la "$DIR"
+
       - name: 编译 debug APK
-        run: gradle assembleDebug --no-daemon --stacktrace
+        run: gradle assembleDebug --no-daemon --stacktrace -p "$PROJECT_DIR"
 
       - name: 上传 APK 产物
         uses: actions/upload-artifact@v4
         with:
           name: DeviceProbe-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: ${{ env.PROJECT_DIR }}/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 30

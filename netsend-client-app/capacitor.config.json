@@ -1,9 +1,0 @@
-{
-  "appId": "com.pid.client",
-  "appName": "飞翔",
-  "webDir": "www",
-  "server": {
-    "androidScheme": "http",
-    "cleartext": true
-  }
-}

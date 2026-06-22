@@ -51,6 +51,20 @@ jobs:
           echo "PROJECT_DIR=$DIR" >> "$GITHUB_ENV"
           ls -la "$DIR"
 
+      - name: 下载矫正模型 carddetection.onnx(从 GitHub Release)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # 模型 37.8MB,网页传不了,放在 Release 里,编译时按 tag 下载到 assets/models/
+          # 需要:仓库里建一个 tag 为 models 的 Release,上传资产文件名 carddetection.onnx
+          DEST="$PROJECT_DIR/app/src/main/assets/models"
+          mkdir -p "$DEST"
+          echo "从 Release(tag=models)下载 carddetection.onnx ..."
+          gh release download models --repo "$GITHUB_REPOSITORY" --pattern 'carddetection.onnx' --dir "$DEST" --clobber
+          echo "校验 sha256(必须等于旧App原始模型,否则中止)..."
+          echo "ca99ed5a20c11cf1c30020a1f722fcc85f020e5cea3ce629ffb576da981bb321  $DEST/carddetection.onnx" | sha256sum -c -
+          echo "模型就绪:"; ls -la "$DEST"
+
       - name: 编译 debug APK
         run: gradle assembleDebug --no-daemon --stacktrace -p "$PROJECT_DIR"
 

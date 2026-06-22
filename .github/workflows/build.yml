@@ -56,11 +56,18 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           # 模型 37.8MB,网页传不了,放在 Release 里,编译时按 tag 下载到 assets/models/
-          # 需要:仓库里建一个 tag 为 models 的 Release,上传资产文件名 carddetection.onnx
+          # 需要:仓库里建一个 tag 为 models 的【已发布(Publish,非草稿)】Release,附件名 carddetection.onnx
           DEST="$PROJECT_DIR/app/src/main/assets/models"
           mkdir -p "$DEST"
+          echo "当前仓库:$GITHUB_REPOSITORY"
+          echo "===== 现有 Release 列表(确认有没有 tag=models、是否已发布)====="
+          gh release list --repo "$GITHUB_REPOSITORY" || echo "(一个 Release 都列不出来,多半是还没建)"
+          echo "============================================================="
           echo "从 Release(tag=models)下载 carddetection.onnx ..."
-          gh release download models --repo "$GITHUB_REPOSITORY" --pattern 'carddetection.onnx' --dir "$DEST" --clobber
+          if ! gh release download models --repo "$GITHUB_REPOSITORY" --pattern 'carddetection.onnx' --dir "$DEST" --clobber; then
+            echo "::error::没找到 tag=models 的 Release 或其附件 carddetection.onnx。请确认:① Release 已【Publish】不是 Draft 草稿;② tag 正好是 models;③ 附件名正好是 carddetection.onnx。详见仓库里『上传矫正模型到Release步骤.md』"
+            exit 1
+          fi
           echo "校验 sha256(必须等于旧App原始模型,否则中止)..."
           echo "ca99ed5a20c11cf1c30020a1f722fcc85f020e5cea3ce629ffb576da981bb321  $DEST/carddetection.onnx" | sha256sum -c -
           echo "模型就绪:"; ls -la "$DEST"

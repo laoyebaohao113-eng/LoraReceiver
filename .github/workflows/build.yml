@@ -3,11 +3,14 @@ name: Build Android APK
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:        # 也可在 Actions 页面手动点 Run
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: netsend-client-app   # ★ 所有 run 步骤都进这个子文件夹执行
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,6 +47,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
+          # ★ artifact 路径是相对“仓库根目录”，所以要带 netsend-client-app/ 前缀
           name: pid-client-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: netsend-client-app/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
